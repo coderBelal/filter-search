@@ -4,19 +4,19 @@ import { CloudCog, Tally3 } from 'lucide-react';
 import axios from 'axios';
 import BookCard from './BookCard';
 
-const MainContent = () => {
+const MainContent: React.FC = () => {
   const { searchQuery, selectCategory, minPrice, maxPrice, keyword } = useFilter();
-  const [product, setProducts] = useState([]);
-  const [filter, setFilter] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [product, setProducts] = useState<Product[]>([]);
+  const [filter, setFilter] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const itemPerPage = 12;
 
   const handleDropdownToggle = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
-  const handleFilterChange = (newFilter) => {
+  const handleFilterChange = (newFilter: string) => {
     setFilter(newFilter);
     setDropdownOpen(false); 
   };
@@ -34,7 +34,7 @@ const MainContent = () => {
     });
   }, [currentPage, keyword]);
 
-  const getFilterProducts = () => {
+  const getFilterProducts = (): Product[] => {
     let filterProducts = product;
 
     if (selectCategory) {
@@ -66,17 +66,17 @@ const MainContent = () => {
   };
 
   const filterProducts = getFilterProducts();
-  const totalProduct = 100;
+  const totalProduct = 100; // This should be updated according to your actual total products
   const totalPage = Math.ceil(totalProduct / itemPerPage);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     if (page > 0 && page <= totalPage) {
       setCurrentPage(page);
     }
   };
 
-  const getPaginationButtons = () => {
-    const buttons = [];
+  const getPaginationButtons = (): number[] => {
+    const buttons: number[] = [];
     let startPage = Math.max(1, currentPage - 2);
     let endPage = Math.min(totalPage, currentPage + 2);
     
@@ -158,3 +158,4 @@ const MainContent = () => {
 };
 
 export default MainContent;
+
