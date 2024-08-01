@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface Blog {
     title: string;
     author: string;
@@ -13,7 +11,6 @@ const PopularBlog = () => {
         { title: 'My Amazing Blog Title 2', author: 'John', likes: 153, comments: 25 },
         { title: 'My Amazing Blog Title 3', author: 'Mark', likes: 140, comments: 44 },
         { title: 'My Amazing Blog Title 4', author: 'Alex', likes: 123, comments: 25 },
-    
     ];
 
     return (
