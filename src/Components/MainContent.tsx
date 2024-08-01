@@ -15,12 +15,12 @@ interface Product {
 
 const MainContent: React.FC = () => {
   const { searchQuery, selectCategory, minPrice, maxPrice, keyword } = useFilter();
-  const [product, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [filter, setFilter] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const itemPerPage = 12;
-
+  const itemsPerPage = 12;
+  
   const handleDropdownToggle = () => {
     setDropdownOpen(!dropdownOpen);
   };
@@ -31,52 +31,53 @@ const MainContent: React.FC = () => {
   };
 
   useEffect(() => {
-    let url = `https://dummyjson.com/products?limit=${itemPerPage}&skip=${(currentPage - 1) * itemPerPage}`;
+    let url = `https://dummyjson.com/products?limit=${itemsPerPage}&skip=${(currentPage - 1) * itemsPerPage}`;
     if (keyword) {
       url = `https://dummyjson.com/products/search?q=${keyword}`;
     }
-    axios.get(url).then(response => {
-      setProducts(response.data.products);
-
-    }).catch(error => {
-      console.error("error fetching data", error);
-    });
+    axios.get(url)
+      .then(response => {
+        setProducts(response.data.products);
+      })
+      .catch(error => {
+        console.error("Error fetching data", error);
+      });
   }, [currentPage, keyword]);
 
   const getFilterProducts = (): Product[] => {
-    let filterProducts = product;
+    let filteredProducts = products;
 
     if (selectCategory) {
-      filterProducts = filterProducts.filter((prod) => prod.category === selectCategory);
+      filteredProducts = filteredProducts.filter((prod) => prod.category === selectCategory);
     }
 
     if (minPrice !== undefined) {
-      filterProducts = filterProducts.filter(prod => prod.price >= minPrice);
+      filteredProducts = filteredProducts.filter(prod => prod.price >= minPrice);
     }
 
     if (maxPrice !== undefined) {
-      filterProducts = filterProducts.filter(prod => prod.price <= maxPrice);
+      filteredProducts = filteredProducts.filter(prod => prod.price <= maxPrice);
     }
 
     if (searchQuery) {
-      filterProducts = filterProducts.filter((prod) => prod.title.toLowerCase().includes(searchQuery.toLowerCase()));
+      filteredProducts = filteredProducts.filter((prod) => prod.title.toLowerCase().includes(searchQuery.toLowerCase()));
     }
 
     switch (filter) {
       case "expensive":
-        return filterProducts.sort((a, b) => b.price - a.price);
+        return filteredProducts.sort((a, b) => b.price - a.price);
       case "cheap":
-        return filterProducts.sort((a, b) => a.price - b.price);
+        return filteredProducts.sort((a, b) => a.price - b.price);
       case "popular":
-        return filterProducts.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+        return filteredProducts.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
       default:
-        return filterProducts;
+        return filteredProducts;
     }
   };
 
   const filterProducts = getFilterProducts();
-  const totalProduct = 100; // This should be updated according to your actual total products
-  const totalPage = Math.ceil(totalProduct / itemPerPage);
+  const totalProduct: number = 100; // This should be updated according to your actual total products
+  const totalPage: number = Math.ceil(totalProduct / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     if (page > 0 && page <= totalPage) {
@@ -167,4 +168,5 @@ const MainContent: React.FC = () => {
 };
 
 export default MainContent;
+
 
