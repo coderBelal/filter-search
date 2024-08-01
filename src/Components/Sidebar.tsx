@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { useFilter } from "./FilterContext"
+import { useEffect, useState } from "react";
+import { useFilter } from "./FilterContext";
 
 interface Product {
   category: string;
@@ -11,7 +11,7 @@ interface FetchResponse {
 
 const Sidebar = () => {
   const {
-    searchQuery, setSearchQuery, selectCategory, setSelectCategory, minPrice, setMinPrice, maxPrice, setMaxPrice, keyword, setKeyword
+    searchQuery, setSearchQuery, selectCategory, setSelectCategory, minPrice, setMinPrice, maxPrice, setMaxPrice, setKeyword
   } = useFilter();
 
   const [categories, setCategories] = useState<string[]>([]);
@@ -22,7 +22,7 @@ const Sidebar = () => {
     "Trend",
     "Shoes",
     "Shirt",
-    "Art"
+
   ]);
 
   useEffect(() => {
@@ -41,12 +41,12 @@ const Sidebar = () => {
     fetchCategories();
   }, []);
 
-  const handleMinPrice = (e) => {
+  const handleMinPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setMinPrice(value ? parseInt(value) : undefined);
   };
 
-  const handleMaxPrice = (e) => {
+  const handleMaxPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setMaxPrice(value ? parseInt(value) : undefined);
   };
@@ -67,7 +67,7 @@ const Sidebar = () => {
     setKeyword("");
   };
 
-  const formatValue = (value) => {
+  const formatValue = (value: number | undefined) => {
     return value !== undefined && !isNaN(value) ? value.toString() : "";
   };
 
