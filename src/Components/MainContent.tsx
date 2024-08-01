@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useFilter } from './FilterContext';
-import { CloudCog, Tally3 } from 'lucide-react';
+import { Tally3 } from 'lucide-react';
 import axios from 'axios';
 import BookCard from './BookCard';
+
+interface Product {
+  id: number;
+  title: string;
+  thumbnail: string;
+  price: number;
+  category?: string;
+  rating?: number;
+}
 
 const MainContent: React.FC = () => {
   const { searchQuery, selectCategory, minPrice, maxPrice, keyword } = useFilter();
@@ -38,19 +47,19 @@ const MainContent: React.FC = () => {
     let filterProducts = product;
 
     if (selectCategory) {
-      filterProducts = filterProducts.filter((product) => product.category === selectCategory);
+      filterProducts = filterProducts.filter((prod) => prod.category === selectCategory);
     }
 
     if (minPrice !== undefined) {
-      filterProducts = filterProducts.filter(product => product.price >= minPrice);
+      filterProducts = filterProducts.filter(prod => prod.price >= minPrice);
     }
 
     if (maxPrice !== undefined) {
-      filterProducts = filterProducts.filter(product => product.price <= maxPrice);
+      filterProducts = filterProducts.filter(prod => prod.price <= maxPrice);
     }
 
     if (searchQuery) {
-      filterProducts = filterProducts.filter((product) => product.title.toLowerCase().includes(searchQuery.toLowerCase()));
+      filterProducts = filterProducts.filter((prod) => prod.title.toLowerCase().includes(searchQuery.toLowerCase()));
     }
 
     switch (filter) {
@@ -59,7 +68,7 @@ const MainContent: React.FC = () => {
       case "cheap":
         return filterProducts.sort((a, b) => a.price - b.price);
       case "popular":
-        return filterProducts.sort((a, b) => b.rating - a.rating);
+        return filterProducts.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
       default:
         return filterProducts;
     }
@@ -123,13 +132,13 @@ const MainContent: React.FC = () => {
           </div>
         </div>
         <div className='grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 gap-5'>
-          {filterProducts.map((product) => (
+          {filterProducts.map((prod) => (
             <BookCard
-              key={product.id}
-              id={product.id}
-              title={product.title}
-              image={product.thumbnail}
-              price={product.price}
+              key={prod.id}
+              id={prod.id}
+              title={prod.title}
+              image={prod.thumbnail}
+              price={prod.price}
             />
           ))}
         </div>
