@@ -1,4 +1,3 @@
-import React from 'react';
 const MobileWarning = () => {
   return (
     <div className="fixed inset-0 bg-gray-800 text-white flex items-center justify-center z-50">
